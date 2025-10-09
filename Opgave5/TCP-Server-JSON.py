@@ -24,14 +24,14 @@ def handleClient(connectionSocket):
         numbers = message["numbers"]
         for num in numbers:
             if not isinstance(num, int):
-                connectionSocket.send(json.dumps({"result": "All values must be integers"}).encode())
+                connectionSocket.send(json.dumps({"error": "All values must be integers"}).encode())
                 continue
         
         # Perform operation based on the "operation" field
         match message["operation"]:
             case "Random":
                 if(numbers[0] > numbers[1]):
-                    connectionSocket.send(json.dumps({"result": "First number must be less than second number"}).encode())
+                    connectionSocket.send(json.dumps({"error": "First number must be less than second number"}).encode())
                     continue
                 random_number = random.randint(int(numbers[0]), int(numbers[1]))
                 connectionSocket.send(json.dumps({"result": random_number}).encode())
@@ -42,7 +42,7 @@ def handleClient(connectionSocket):
                 result = int(numbers[0]) - int(numbers[1])
                 connectionSocket.send(json.dumps({"result": result}).encode())
             case _:
-                connectionSocket.send(json.dumps({"result": "Unknown operation"}).encode())
+                connectionSocket.send(json.dumps({"error": "Unknown operation"}).encode())
 
 # Main server loop to accept connections
 while True:
